@@ -3,6 +3,27 @@ name: Build
 on:
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write 
+  packages: write
+  actions: write
+  checks: write
+  security-events: write
+  issues: write
+  deployments: write
+  pages: write
+  repository-projects: write
+  discussions: write
+  statuses: write
+
+# Use github.event.repository.id to have a unique value per repo to avoid conflicts of multiple
+# repositories deploying this sample. It's kind of hackish, but works for sample purposes and 
+# avoids manual replacements by users. Under normal circumstances, you would use a constant.
+env:
+  # SONAR_HOST_URL: https://joshjohanning-org-sonarqube-test-5xgpv494cv6gq-9000.githubpreview.dev
+  SONAR_PROJECT_KEY: devopselvis_sonar-scanning-examples_AYr4P4_Uf1uaQs_jjDrn
 
 jobs:
   build:
@@ -36,3 +57,12 @@ jobs:
         #run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=devopselvis_sonar-scanning-examples_AYr4P4_Uf1uaQs_jjDrn -Dsonar.projectName='sonar-scanning-examples'
         run: mvn clean verify sonar:sonar -Dsonar.projectKey=devopselvis_sonar-scanning-examples_AYr4P4_Uf1uaQs_jjDrn -Dsonar.projectName='sonar-scanning-examples'
         working-directory: sonarqube-scanner-maven/maven-basic
+
+      - uses: LouisBrunner/checks-action@v1.1.1
+        if: always()
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: SonarQube Link
+          conclusion: ${{ job.status }}
+          output: |
+            {"summary":"${{ secrets.SONAR_HOST_URL}}/dashboard?id=${{ env.SONAR_PROJECT_KEY }}"}
