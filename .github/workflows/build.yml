@@ -33,5 +33,6 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=devopselvis_sonar-scanning-examples_AYr4P4_Uf1uaQs_jjDrn -Dsonar.projectName='sonar-scanning-examples'
+        #run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=devopselvis_sonar-scanning-examples_AYr4P4_Uf1uaQs_jjDrn -Dsonar.projectName='sonar-scanning-examples'
+        run: mvn clean verify sonar:sonar -Dsonar.projectKey=devopselvis_sonar-scanning-examples_AYr4P4_Uf1uaQs_jjDrn -Dsonar.projectName='sonar-scanning-examples'
         working-directory: sonarqube-scanner-maven/maven-basic
